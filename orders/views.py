@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 def index(request):
 	context = {
@@ -16,18 +17,26 @@ def index(request):
 	return render(request, 'index.html', context)
 
 def register(request):
-	if request.method == 'POST':
-		form = UserRegisterForm(request.POST)
-		if form.is_valid():
-			form.save()
-			username = form.cleaned_data['username']
-			messages.success(request, f'Usuario {username} creado')
-			return redirect('index')
-	else:
-		form = UserRegisterForm()
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            nuevoUsuario = form.save()
+            username = form.cleaned_data['username']
+            password2 = form.cleaned_data['password2']
+            #Creamos el carrito
+            Cart.objects.create(user = User.objects.get(username = username), total = 0.00)
 
-	context = { 'form' : form }
-	return render(request, 'register.html', context)
+            #Iniciamos sesión
+            print(password2)
+            nuevoUsuario = authenticate(username=username, password=password2)
+            login(request, nuevoUsuario)
+            messages.success(request, 'Usuario creado')
+            return redirect('index')
+    else:
+        form = UserRegisterForm()
+        
+    context = { 'form' : form }
+    return render(request, 'register.html', context)
 
 @login_required
 def post(request):
@@ -38,7 +47,7 @@ def post(request):
 			post = form.save(commit=False)
 			post.user = current_user
 			post.save()
-			messages.success(request, 'Post enviado')
+			messages.success(request, 'Anuncio enviado')
 			return redirect('index')
 	else:
 		form = PostForm()
@@ -55,25 +64,6 @@ def profile(request, username=None):
 		posts = current_user.posts.all()
 		user = current_user
 	return render(request, 'profile.html', {'user':user, 'posts':posts})
-
-
-def follow(request, username):
-	current_user = request.user
-	to_user = User.objects.get(username=username)
-	to_user_id = to_user
-	rel = Relationship(from_user=current_user, to_user=to_user_id)
-	rel.save()
-	messages.success(request, f'sigues a {username}')
-	return redirect('index')
-
-def unfollow(request, username):
-	current_user = request.user
-	to_user = User.objects.get(username=username)
-	to_user_id = to_user.id
-	rel = Relationship.objects.filter(from_user=current_user.id, to_user=to_user_id).get()
-	rel.delete()
-	messages.success(request, f'Ya no sigues a {username}')
-	return redirect('index')
 
 def addItem_view(request):
     
@@ -105,7 +95,8 @@ def addItem_view(request):
             price = item.price_small
         elif size == 'L':
             price = item.price_large
-
+        
+        print(request.user)
         cart = Cart.objects.get(user=request.user)
         cart_item = Cart_Item(cart=cart, item_detail=item, size=size, price=price)
         cart_item.save()
@@ -115,8 +106,8 @@ def addItem_view(request):
             cart_item.save()
         cart.total += cart_item.price
         cart.save()
-    messages.add_message(request, messages.INFO, f'Item {cart_item.item_detail} added!')
-    return HttpResponseRedirect(reverse('home'))
+    messages.success(request, 'Orden registrada')
+    return HttpResponseRedirect(reverse('index'))
 
 def removeItem_view(request, cart_item_id):
     cart_item = Cart_Item.objects.get(pk=cart_item_id)
@@ -124,7 +115,7 @@ def removeItem_view(request, cart_item_id):
     cart.total -= cart_item.price
     cart_item.delete()
     cart.save()
-    messages.add_message(request, messages.INFO, f'Item {cart_item.item_detail} removed!')
+    messages.success(request, messages.INFO, f'Item {cart_item.item_detail} removido!')
     return HttpResponseRedirect(reverse('cart'))
 
 def emptyCart_view(request):
@@ -135,7 +126,7 @@ def emptyCart_view(request):
     if cart_items:
         for cart_item in cart_items:
             cart_item.delete()
-    messages.add_message(request, messages.INFO, 'Cleared your cart!')
+    messages.success(request, 'Limpió su carrito')
     return HttpResponseRedirect(reverse('cart'))
 
 def cart_view(request):
@@ -158,9 +149,9 @@ def order_view(request):
         order_item.save()
         order_item.topping.set(cart_item.topping.all())
         order_item.save()
-    messages.add_message(request, messages.SUCCESS, f'Order #{order.pk} placed successfully!')
+    messages.success(request, 'colocado con éxito')
     emptyCart_view(request)
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('index'))
 
 def orders_view(request):
     orders = Order.objects.filter(user=request.user)
@@ -192,7 +183,7 @@ def markComplete_view(request, order_item_id):
     order = Order.objects.get(pk=order_item_id)
     order.status = 'Completed'
     order.save()
-    messages.add_message(request, messages.SUCCESS, f'Marked Order #{order.pk} as completed')
+    messages.success(request, messages.SUCCESS, f'Marked Order #{order.pk} como completado')
     return HttpResponseRedirect(reverse('vieworders'))
 
 

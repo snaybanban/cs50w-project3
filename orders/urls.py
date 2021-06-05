@@ -13,8 +13,6 @@ urlpatterns = [
 	path('login/', LoginView.as_view(template_name='login.html'), name='login'),
 	path('logout/', LogoutView.as_view(template_name='logout.html'), name='logout'),
 	path('post/', views.post, name='post'),
-	path('follow/<str:username>/', views.follow, name='follow'),
-	path('unfollow/<str:username>/', views.unfollow, name='unfollow'),
 	path('add_item', views.addItem_view, name='add_item'),
     path('remove_item/<int:cart_item_id>', views.removeItem_view, name='remove_item'),
     path('empty_cart', views.emptyCart_view, name='empty_cart'),
@@ -24,4 +22,4 @@ urlpatterns = [
     path('vieworders', views.viewOrders_view, name='vieworders'),
     path('markComplete/<int:order_item_id>', views.markComplete_view, name='markcomplete'),
 	
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

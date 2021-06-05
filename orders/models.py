@@ -9,16 +9,6 @@ class Profile(models.Model):
 	def __str__(self):
 		return f'Perfil de {self.user.username}'
 
-	def following(self):
-		user_ids = Relationship.objects.filter(from_user=self.user)\
-								.values_list('to_user_id', flat=True)
-		return User.objects.filter(id__in=user_ids)
-
-	def followers(self):
-		user_ids = Relationship.objects.filter(to_user=self.user)\
-								.values_list('from_user_id', flat=True)
-		return User.objects.filter(id__in=user_ids)
-
 
 class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
@@ -31,18 +21,6 @@ class Post(models.Model):
 	def __str__(self):
 		return f'{self.user.username}: {self.content}'
 
-
-class Relationship(models.Model):
-	from_user = models.ForeignKey(User, related_name='relationships', on_delete=models.CASCADE)
-	to_user = models.ForeignKey(User, related_name='related_to', on_delete=models.CASCADE)
-
-	def __str__(self):
-		return f'{self.from_user} to {self.to_user}'
-
-	class Meta:
-		indexes = [
-		models.Index(fields=['from_user', 'to_user',]),
-		]
 
 class Topping(models.Model):
     name = models.CharField(max_length=32)
@@ -66,7 +44,7 @@ class Item(models.Model):
     item_type = models.CharField(max_length=1, choices=TYPE, blank=True, null=True)
     price_small = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     price_large = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    #image = models.ImageField(default='pizza.jpg')
+    image = models.ImageField(upload_to='static/image/', blank=True)
 
     def max_topping(self):
         if(self.name[0].isdigit()):
@@ -85,13 +63,13 @@ class Item(models.Model):
 # Internal Models
 class Order(models.Model):
     STATUS = [
-        ('Initiated', 'Initiated'),
-        ('Completed', 'Completed'),
-        ('Refunded', 'Refunded')
+        ('Iniciada', 'Iniciada'),
+        ('Terminada', 'Terminada'),
+        ('Reintegrada', 'Reintegrada')
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    status = models.CharField(max_length=64, choices=STATUS, default='Initiated')
+    status = models.CharField(max_length=64, choices=STATUS, default='Iniciada')
     date = models.DateTimeField(auto_now_add=True, blank=True)
     
     def __str__(self):
