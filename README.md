@@ -8,6 +8,8 @@ Al momento de añadir el producto al carrito, el usuario podrá ver su pedido, e
 
 
 Vistas
+
+
 	Cart: en ella se mostrará las ordenes añadidas y en ella se verá y podrá dar por completado el producto.
 	Comparar: acá se mostrará la comparativa sobre las pizzas siciliana y regular.
 	Contacto: so mostrara información del local.
@@ -24,6 +26,7 @@ Vistas
  adquirido, información de día y hora y su precio. También podrá marcar como completada.
  
 
-Toque personal
+
+Toque personal:
 Se implemento el postear anuncios, para mostrárselos a los usuarios al momento de estar logeados.
 El usuario staff, podrá ver todas las ordenes de sus clientes y marcarlas como terminadas.
