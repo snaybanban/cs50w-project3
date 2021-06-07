@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from .models import *
 from .forms import UserRegisterForm, PostForm
@@ -163,6 +164,15 @@ def orders_view(request):
         dic.update({order: order_items})
 
     return render(request, 'orders.html', {'empty': False, 'dic': dic})
+
+def comparar(request):
+    return render(request, 'comparar.html')
+
+def horas(request):
+    return render(request, 'horas.html')
+
+def contacto(request):
+    return render(request, 'contacto.html')
 
 def viewOrders_view(request):
     if request.method == 'POST':

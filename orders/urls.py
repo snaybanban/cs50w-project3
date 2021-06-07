@@ -18,8 +18,11 @@ urlpatterns = [
     path('empty_cart', views.emptyCart_view, name='empty_cart'),
     path('cart', views.cart_view, name='cart'),
     path('order', views.order_view, name='order'),
+	path('comparar/', views.comparar, name='comparar'),
+	path('horas/', views.horas, name='horas'),
+	path('contacto/', views.contacto, name='contacto'),
     path('orders', views.orders_view, name='orders'),
     path('vieworders', views.viewOrders_view, name='vieworders'),
     path('markComplete/<int:order_item_id>', views.markComplete_view, name='markcomplete'),
 	
-] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
