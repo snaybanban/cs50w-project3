@@ -1,30 +1,28 @@
 {% extends 'layout.html' %}
-{% block title %}Pending Orders{%endblock%}
+{% block title %}Ordenes pendientes{%endblock%}
 {%block tt%} 
   {% if empty %}
-    <h1>Pending Orders <span class="badge badge-secondary" style="color: black;">0</span></h1>
+    <h1> Ordenes pendientes <span class="badge badge-secondary" style="color: black;">0</span></h1>
   {% else %}
-  All pending orders
+  Todas las órdenes pendientes
   {%endif%}
-{%endblock%}
-{% block body %}
-{% if not empty %}
+  {% if not empty %}
 {% for key,value in dic.items %}
 <table class="table table-bordered">
     <thead class="thead-dark">
         <tr>
-          <th scope="col">Order #{{key.pk}} 
-          <a href="{% url 'markcomplete' key.pk %}" class="btn btn-outline-success">Mark as completed</a>
+          <th scope="col">Orden #{{key.pk}} 
+          <a href="{% url 'markcomplete' key.pk %}" class="btn btn-outline-success"> Marcar como completado</a>
           </th>
-          <th scope="col">Current Status: [ {{key.status}} ] Ordered Date: {{key.date}} User: {{key.user}} </th>
+          <th scope="col">Estado actual: [ {{key.status}} ] Fecha de pedido: {{key.date}} Usuario: {{key.user}} </th>
           <th scope="col">Total: ${{key.total}}</th>
         </tr>
     </thead>
     <thead class="thead">
       <tr>
-        <th scope="col">Item</th>
-        <th scope="col">Size</th>
-        <th scope="col">Price</th>
+        <th scope="col">Producto</th>
+        <th scope="col">Tamaño</th>
+        <th scope="col">Precio</th>
       </tr>
     </thead>
     <tbody>

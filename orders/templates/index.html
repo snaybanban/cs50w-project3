@@ -1,9 +1,12 @@
 {% extends 'layout.html' %}
+{% block title %} 
+    Menu
+{% endblock %}
 {% load humanize %}
 {% block content %}
 {% for post in posts %}
 <div class="col" style="text-align: center;">
-  <h1>Bienvenidos a Banban's pizza</h1>
+  <h1>Pinocchio's Pizza & Subs</h1>
 </div>
 
 <article>
@@ -18,7 +21,6 @@
     </div>
 </article>
 {% endfor %}
-<body>
   <div class="tab-content" id="pills-tabContent">
     <div
       class="tab-pane fade show active container"
@@ -37,8 +39,10 @@
 
       <div class="row row-cols-sm-1">
         {% block tt %}
-        {% if not item_cats %}
-        <h1>No Items! Please add some items through admin interface <a href="/admin" class="badge badge-secondary">Admin Panel</a></h1>
+        {%if request.user.is_staff %}
+        {% if item_cats %}
+        <center><h1>Agregue + elementos a través de la interfaz de administración <a href="/admin/orders/item/add" class="badge badge-secondary" style="background-color: chocolate;">Panel de administracion</a></h1></center>
+        {%endif%}
         {%endif%}
         {%endblock%}
         {% block body %}
@@ -51,7 +55,8 @@
                         <div class="card h-100"">
                             <div class="card-body">
                                 <h5 class="card-title">
-                                  <img src="../../static/pizza.jpg" style="width:20%">
+                                  {%load static%}
+                                  <img src="{{item.image}}" style="width:120px; height: 120px;">
                                     <strong>
                                         {{item.name}} 
                                         {%if item.item_type != none %}
@@ -60,7 +65,7 @@
                                             [ <span class="text-muted">{{item.item_type}}</span> ]
                                         {%endif%}
                                     </strong>
-                                    <button style="float: right;" class="btn btn-outline-primary" data-toggle="modal" data-target="#item-{{item.id}}-modal">Add to cart</button>
+                                    <button style="float: right;" class="btn btn-outline-primary" data-toggle="modal" data-target="#item-{{item.id}}-modal">Añadir pedido</button>
                                 </h5>
                                 <p class="card-text">Pequeña: {{item.price_small}}<br>Grande: {{item.price_large}} </strong></p>
                             </div>
@@ -77,7 +82,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Customize <strong>{{item.name}}</strong></h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Personalizar <strong>{{item.name}}</strong></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -90,7 +95,7 @@
                                     <input name="max-topping" type="hidden" value="{{item.max_topping}}">
                                         {% for i in item.max_topping %}
                                             <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Select Topping {{i}}</label>
+                                            <label for="exampleFormControlSelect1">Seleccionar cobertura {{i}}</label>
                                             <select name="select-{{i}}" class="form-control" id="exampleFormControlSelect1">
                                                 {% for topping in toppings %}
                                                 <option value="{{topping.id}}">{{topping.name}}</option>
@@ -100,7 +105,7 @@
                                         {%endfor%}
                                     {%endif%}
                                     <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Select Size</label>
+                                    <label for="exampleFormControlSelect1">Selecciona el tamaño</label>
                                     <select name="size-select" class="form-control" id="exampleFormControlSelect1">
                                         {% if item.price_small %}
                                             <option value="S">Pequeña</option>
@@ -127,11 +132,4 @@
   <footer class="bg-dark p-3 mt-5">
     <p class="text-center m-0 text-muted">Gracias por Ver y no comprar ☻</p>
   </footer>
-
-  <script
-    src="https://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-    crossorigin="anonymous"
-  ></script>
-</body>
 {% endblock %}

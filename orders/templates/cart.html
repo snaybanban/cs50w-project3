@@ -2,20 +2,20 @@
 {% block title %}Cart{%endblock%}
 {%block tt%} 
   {% if empty %}
-    <h1>Your cart is empty <a href="{% url 'home' %}" class="badge badge-secondary">Visit Menu</a></h1>
+    <h1>Su carrito está vacío  <a href="{% url 'index' %}" class="badge badge-secondary">Visitar Menu</a></h1>
   {% else %}
-  {{request.user}}'s Cart 
   {%endif%}
 {%endblock%}
-{% block body %}
+{% block content %}
 {% if not empty %}
+<center><h2>{{request.user}}'s Cart</center></h2>
 <table class="table">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">Item</th>
-        <th scope="col">Size</th>
-        <th scope="col">Price</th>
-        <th scope="col"><a class="btn btn-secondary" data-toggle="tooltip"  title="Removes all items from cart" href="{% url 'empty_cart' %}">Empty Cart</a></th>
+        <th scope="col">Producto</th>
+        <th scope="col">Tamaño</th>
+        <th scope="col">Precio</th>
+        <th scope="col"><a class="btn btn-secondary" data-toggle="tooltip"  title="Removes all items from cart" href="{% url 'empty_cart' %}">Carro vacio</a></th>
       </tr>
     </thead>
     <tbody>
@@ -33,17 +33,17 @@
             </th>
             <td>{{cart_item.size}}</td>
             <td>${{cart_item.price}}</td>
-            <td><a href="{% url 'remove_item' cart_item.pk %}">Remove item</a></td>
+            <td><a href="{% url 'remove_item' cart_item.pk %}">Eliminar orden</a></td>
         </tr>
     {%endfor%}
     </tbody>
 </table><br><br>
 <div class="jumbotron">
   <h1 class="display-5">Total: ${{cart.total}}</h1>
-  <p class="lead">Amount Payable</p>
+  <p class="lead">Cantidad pagable</p>
   <hr class="my-4">
-  <p>Click here to confirm and place your order</p>
-  <a class="btn btn-primary btn-lg" href="{% url 'order' %}" role="button">Order Now</a>
+  <p>Haga clic aquí para confirmar y realizar su pedido</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'order' %}" role="button">Orden Nueva</a>
 </div>
 {%endif%}
 {%endblock%}

@@ -4,24 +4,16 @@
 <!-- Profile -->
 <div class="profile">
 	<img src="../../static/pizza.jpg"> <!--{{ user.profile.image.url }} -->
-	<h2>@{{ user.username}}</h2>
-	<button><a class="follow-button" href="#">Follow</a></button>
+	<h2>@{{ user.username}} {%if request.user.is_staff %} - Administrador {%endif%}</h2>
+	<p>Esta seccion es unicamente para los administradores</p>
+	<h2><a href="/admin" class="badge badge-secondary" style="background-color: chocolate;">Admin Panel</a></h2>
 </div>
 
 <!-- Follow items -->
 <div class="follow">
 	<div>
-		<h5>Post</h5>
+		<h5>Anuncios</h5>
 		<p>{{ user.posts.count }}</p>
-	</div>
-	<div>
-		<h5>Followers</h5>
-		<p>0</p>
-
-	</div>
-	<div>
-		<h5>Following</h5>
-		<p>0</p>
 	</div>
 </div>
 

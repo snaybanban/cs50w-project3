@@ -1,14 +1,14 @@
 {% extends 'layout.html' %}
-{% block title %}My Orders{%endblock%}
+{% block title %}Mis ordenes{%endblock%}
 {%block tt%} 
   {% if empty %}
-    <h1>No orders placed yet! <a href="{% url 'home' %}" class="badge badge-secondary">Visit Menu</a></h1>
+    <h1>¡Aún no se han realizado pedidos! <a href="{% url 'index' %}" class="badge badge-secondary" style="background-color: chocolate;">Visitar Menú</a></h1>
   {% else %}
-  {{request.user}}'s Orders 
+  <center><h2>{{request.user}}'s Pedidos</center></h2>
   {%endif%}
-{%endblock%}
-{% block body %}
-{% if not empty %}
+  {%endblock%}
+  {%block content%}
+  {% if not empty %}
 {% for key,value in dic.items %}
 {% if key.status == 'Completed' %}
 <table class="table table-sm">
@@ -17,16 +17,16 @@
 {%endif%}
     <thead class="thead-dark">
         <tr>
-          <th scope="col">Order #{{key.pk}} [ {{key.status}} ]</th>
-          <th scope="col">Ordered Date: {{key.date}}</th>
+          <th scope="col">Pedido #{{key.pk}} [ {{key.status}} ]</th>
+          <th scope="col">Fecha de pedido: {{key.date}}</th>
           <th scope="col">Total: ${{key.total}}</th>
         </tr>
     </thead>
     <thead class="thead">
       <tr>
-        <th scope="col">Item</th>
-        <th scope="col">Size</th>
-        <th scope="col">Price</th>
+        <th scope="col">Pedido</th>
+        <th scope="col">Tamaño</th>
+        <th scope="col">Precio</th>
       </tr>
     </thead>
     <tbody>
