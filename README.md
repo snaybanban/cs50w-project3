@@ -22,8 +22,7 @@ Vistas
 	Post: esta ruta se le mostrará al usuario administrador, en ella podrá incluir anuncios en tiempo real para sus clientes.
 	Profile: esta ruta de será mostrada para los administradores, acá saldrán información al admin de sus anuncios en la pagina y desde acá podrá acceder al panel de admin en Django.
 	Register: esta ruta será para registrar un nuevo usuario.
-	Vieworders: esta ruta solo será visible para los administradores. Acá el admin podrá ver las ordenes solicitadas por sus clientes, podrá ver el nombre del usuario, el servicio
- adquirido, información de día y hora y su precio. También podrá marcar como completada.
+	Vieworders: esta ruta solo será visible para los administradores. Acá el admin podrá ver las ordenes solicitadas por sus clientes, podrá ver el nombre del usuario, el servicio adquirido, información de día y hora y su precio. También podrá marcar como completada.
  
 
 
